@@ -10,10 +10,10 @@ Now- some advice:
 
 2) The most important elements of an entity for timber computing are:
 
-entity["Id"]: the UUID identifier of the entity. As far as I can tell, this is just a type-4 UUID, so, totally random.
-entity["Components"]["NamedEntity"]["EntityName"]: The human-readable name of the entity. Give your relays and memories meaningful names, it will make digging through a json for why things broke so much easier.
-entity["Components"]["BlockObject"]["Coordinates"]: the X/Y/Z coordinates of the entity
-entity["Components"]["Relay" or "Memory"]: The subtype of the entity (AND, OR, Latch, Flip-Flop, etc), and its inputs' UUIDs
+- entity["Id"]: the UUID identifier of the entity. As far as I can tell, this is just a type-4 UUID, so, totally random.
+- entity["Components"]["NamedEntity"]["EntityName"]: The human-readable name of the entity. Give your relays and memories meaningful names, it will make digging through a json for why things broke so much easier.
+- entity["Components"]["BlockObject"]["Coordinates"]: the X/Y/Z coordinates of the entity
+- entity["Components"]["Relay" or "Memory"]: The subtype of the entity (AND, OR, Latch, Flip-Flop, etc), and its inputs' UUIDs
 
 3) Never overwrite your input file. You will need multiple loops of the run script -> try to load -> troubleshoot cycle, maintaining the exact same input is incredibly helpful.
 
