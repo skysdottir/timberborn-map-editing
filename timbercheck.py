@@ -129,16 +129,22 @@ for mem_key in memories:
 if (fails == 0):
     print("All references check out!")
     
-print("Checking relay locations for collisions...")
+print("Checking for entity collisions...")
 
 ent_locs = {}
-
+oob_ents = []
 fails = 0
+
+worldsize = (patch_son["Singletons"]["MapSize"]["Size"]["X"], patch_son["Singletons"]["MapSize"]["Size"]["Y"])
 
 for ent in patch_son["Entities"]:
     if (ent["Components"].get("BlockObject") != None):
         coordinates = ent["Components"]["BlockObject"]["Coordinates"]
         xyz = (coordinates["X"], coordinates["Y"], coordinates["Z"])
+        
+        if (xyz[0] < 0 or xyz[0] >= worldsize[0] or xyz[1] < 0 or xyz[1] >= worldsize[1]):
+            oob_ents.append(ent)
+        
         
         collide = ent_locs.get(xyz)
         
@@ -150,3 +156,18 @@ for ent in patch_son["Entities"]:
         
 if (fails == 0):
     print("No entity collisions")
+   
+print("Checking for OOB entities...")
+
+if (len(oob_ents) == 0):
+    print("No out-of-bounds entities")
+else:
+    for ent in oob_ents:
+        name = "[unnamed]"
+        coordinates = ent["Components"]["BlockObject"]["Coordinates"]
+        xyz = (coordinates["X"], coordinates["Y"], coordinates["Z"])
+        
+        if(ent["Components"].get("NamedEntity")):
+            name = ent["Components"]["NamedEntity"]["EntityName"]
+            
+        print("Out-of-bounds entity: " + name + " ( " + ent["Id"] + " ) at " + str(xyz))
