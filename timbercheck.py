@@ -1,9 +1,8 @@
 # A little world-file consistency checker, for people programatically editing Timberborn save files
-# Currently runs two checks:
+# Currently runs three checks:
 # - Check to see that relays and memories all refer to existing entities, instead of pointing into the void
 # - Check to make sure we don't have entities trying to occupy the same square.
-
-# Check for internal consistency in a world json file - do all referenced IDs exist?
+# - Check to make sure nothing's out-of-bounds in X or Y
 
 import json
 import re
