@@ -21,4 +21,4 @@ Now- some advice:
 
 5) Always run timbercheck.py. It's probably the most reliable script here - if it complains, pay attention, and try to understand why it's complaining.
 
-These scripts do not currently understand terrain. Timbercheck.py understands locations enough to check for entity collisions, but the other scripts do not. They will just plop things down where specified and crash the game.
+These scripts do not currently understand terrain. Timbercheck.py understands locations enough to check for entity collisions, but the other scripts do not. They will just plop things down where specified.

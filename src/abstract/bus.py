@@ -11,8 +11,15 @@
 # Ready/Used are a signaling pair: Ready XOR Used will give bus status:
 ## 0: Waiting for the inputter to send next bits
 ## 1: Waiting for the reader to consume the current bits
+# Note that Ready/Used pairs will require handling on both ends of the bus
 
 class Bus:
+
+  Enable = "Enable"
+  Shift = "Shift"
+  Ready = "Ready"
+  Used = "Used"
+
   def __init__(self, bits, flags):
     self._bits = []
     self._flags = {}

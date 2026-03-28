@@ -1,11 +1,14 @@
+from abc import ABC, abstractmethod
 from enum import Enum
+from uuid import uuid4
 
-class Type(Enum):
+class NodeType(Enum):
   RELAY = 100
   RELAY_OR = 101
   RELAY_AND = 102
   RELAY_XOR = 103
   RELAY_NOT = 104
+  RELAY_PASSTHROUGH = 105
   MEMORY = 200
   MEM_SET_RESET = 201
   MEM_TOGGLE = 202
@@ -27,10 +30,21 @@ class Type(Enum):
   HTTP_LEVER = 701
   HTTP_ADAPTER = 702
 
-class Node:
-  def __init__(self, type, loc, inputA, inputB, inputReset):
+class Node(ABC):
+  def __init__(self, type, id, name, loc, inputAID, inputBID, inputResetID):
     self._type = type
+    self._id = id or uuid4() # cheap shot, None is falsy so `or` falls through to uuid4()
+    self._name = name
     self._loc = loc
-    self._inputA = inputA
-    self._inputB = inputB
-    self._inputReset = inputReset
+    self._inputAID = inputAID
+    self._inputBID = inputBID
+    self._inputResetID = inputResetID
+
+  @abstractmethod
+  @staticmethod
+  def fromJson(jason):
+    pass
+
+  @abstractmethod
+  def toJson():
+    pass

@@ -1,6 +1,7 @@
 # Abstract: A builder for a chunk of timberborn logic.
 # Expected workflow: 
-# 1) Build a bunch of components, populating their inputs and outputs as you go.
+# 1) Build a bunch of components
+# 1.5) Partially as you go and partially after the fact, set inputs and outputs
 # 2) Validate that they aren't going to collide or otherwise cause trouble
 # 3) Sketch() them all, to set up input and output relays, placeholders in-game.
 # 4) Do any hand-work in-game
@@ -17,3 +18,10 @@ class Component(ABC):
     self._directions = dir
     self._input = input
     self._output = output
+
+  # Return the rectangular dimensions of the component, as a tuple-of-tuples:
+  # ((x1, y1), (x2, y2))
+  # requirements: x1 < x2, y1 < y2
+  @abstractmethod
+  def dimensions():
+    pass
