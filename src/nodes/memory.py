@@ -2,7 +2,7 @@ from src.nodes import NodeType, Node
 import uuid
 
 class Memory(Node):
-  type_map = {NodeType.MEM_SET_RESET: "Set-Reset", NodeType.MEM_TOGGLE: "Toggle", NodeType.MEM_LATCH: "Latch", NodeType.MEM_FLIPFLOP: "FlipFlop"}
+  type_map = {NodeType.MEM_SET_RESET: "SetReset", NodeType.MEM_TOGGLE: "Toggle", NodeType.MEM_LATCH: "Latch", NodeType.MEM_FLIPFLOP: "FlipFlop"}
   to_type_map = {value: key for key, value in type_map.items()}
 
   def toJson(self):
