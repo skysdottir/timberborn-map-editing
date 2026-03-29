@@ -11,14 +11,14 @@ class RegisterN(Component):
     super().__init__(name, layout)
 
     for bit in range(bits):
-      reg = Register1(name + f"_{bit}", layout.cursor(), in_word.bits[bit], write_trigger, prev_read_word.bits[bit], read_trigger)
-      self._subcomponents[bit]=reg
-      self._output.bits[bit]=reg._output.bits[0]
-
-      layout.step()
-
       if(bit > 0 and bit % 8 == 0):
         for step in range(LayoutConfig.ByteSpacing):
           layout.step()
+          
+      reg = Register1(name + f"_{bit}", layout.cursor(), in_word._bits[bit], write_trigger, None if prev_read_word is None else prev_read_word._bits[bit], read_trigger)
+      self._subcomponents.append(reg)
+      self._output.bits.append(reg._output.bits[0])
+
+      layout.step()
     
     layout.nextRow()

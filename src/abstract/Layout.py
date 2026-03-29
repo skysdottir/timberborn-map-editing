@@ -21,13 +21,13 @@ class Direction:
       return Direction(newx, newy)
     else:
       return NotImplemented
-    
-PlusX = Direction(1, 0)
-MinusX = Direction(-1, 0)
-PlusY = Direction(0, 1)
-MinusY = Direction(0, -1)
 
 class Layout:
+  PlusX = Direction(1, 0)
+  MinusX = Direction(-1, 0)
+  PlusY = Direction(0, 1)
+  MinusY = Direction(0, -1)
+
   def __init__(self, loc, step_dir, row_dir):
     self._loc = loc
     self._step = step_dir
@@ -40,8 +40,8 @@ class Layout:
     return self._loc
   
   def cursor(self):
-    step_offset = self._step_dir * self._steps
-    row_offset = self._row_dir * self._rows
+    step_offset = self._step * self._steps
+    row_offset = self._row * self._row_steps
     offset = step_offset + row_offset
     xyz = self._loc
     return(xyz[0] + offset._x, xyz[1]+offset._y, xyz[2])
