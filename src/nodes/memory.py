@@ -1,4 +1,4 @@
-from src.nodes import NodeType, Node
+from src.abstract.node import NodeType, Node
 import uuid
 
 class Memory(Node):
@@ -19,9 +19,8 @@ class Memory(Node):
         "Memory":
         {
           "Mode":Memory.type_map[self._type],
-          "InputA":self._inputA._id,
-          "InputB":self._inputB._id,
-          "InputReset":self._inputReset._id
+          "InputA":self._inputAID,
+          "InputB":self._inputBID
         },
         "Automator":{"State":"Off"},
         "Inventory:ConstructionSite":
@@ -47,12 +46,12 @@ class Memory(Node):
     id = uuid.UUID(jason["Id"])
     name = jason["Components"]["NamedEntity"]["EntityName"]
     xyz = (coordinates["X"], coordinates["Y"], coordinates["Z"])
-    inputA = uuid.UUID(memory["InputA"])
+    inputAID = uuid.UUID(memory["InputA"])
 
-    inputB = None
+    inputBID = None
     if type == NodeType.MEM_LATCH or type == NodeType.MEM_FLIPFLOP:
-      inputB = uuid.UUID(memory["InputB"])
+      inputBID = uuid.UUID(memory["InputB"])
 
-    inputReset = uuid.UUID(memory["InputReset"])
+    inputResetID = uuid.UUID(memory["InputReset"])
 
-    return Memory(type, id, name, xyz, inputA, inputB, inputReset)
+    return Memory(type, id, name, xyz, inputAID, inputBID, inputResetID)

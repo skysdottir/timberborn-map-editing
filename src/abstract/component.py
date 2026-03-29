@@ -11,27 +11,27 @@
 # Components are expected to be nestable
 
 from abc import ABC, abstractmethod
-from bus import Bus
+from src.abstract.bus import Bus
 
 class Component(ABC):
-  def __init__(self, name, loc, dir):
+  def __init__(self, name, loc):
     self._name = name
     self._anchor = loc
-    self._directions = dir
 
     self._output = Bus([], {})
     self._nodes = []
-
-  # Return the rectangular dimensions of the component, as a tuple-of-tuples:
-  # ((x1, y1, z1), (x2, y2, z2))
-  # requirements: x1 <= x2, y1 <= y2, z1 <= z2
-  @abstractmethod
-  def dimensions():
-    pass
+    self._subcomponents = []
 
   # Returns all the entities this component needs
   def nodes(self):
-    return self._nodes
+    back = []
+
+    for subcomp in self._subcomponents:
+      back.extend(subcomp.nodes())
+    
+    back.extend(self._nodes)
+
+    return back
   
   def output(self):
     return self._output

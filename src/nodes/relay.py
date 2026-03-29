@@ -1,4 +1,4 @@
-from src.nodes import NodeType, Node
+from src.abstract.node import NodeType, Node
 import uuid
 
 class Relay(Node):
@@ -20,8 +20,8 @@ class Relay(Node):
         "Relay":
         {
           "Mode":Relay.type_map[self._type],
-          "InputA":self._inputA._id,
-          "InputB":self._inputB._id
+          "InputA":self._inputAID,
+          "InputB":self._inputBID
         },
         "Automator":{"State":"Off"},
         "Inventory:ConstructionSite":
@@ -47,10 +47,10 @@ class Relay(Node):
     id = uuid.UUID(jason["Id"])
     name = jason["Components"]["NamedEntity"]["EntityName"]
     xyz = (coordinates["X"], coordinates["Y"], coordinates["Z"])
-    inputA = uuid.UUID(relay["InputA"])
+    inputAID = uuid.UUID(relay["InputA"])
 
-    inputB = None
+    inputBID = None
     if not (type == NodeType.RELAY_NOT or NodeType.RELAY_PASSTHROUGH):
-      inputB = uuid.UUID(relay["InputB"])
+      inputBID = uuid.UUID(relay["InputB"])
 
-    return Relay(type, id, name, xyz, inputA, inputB, None)
+    return Relay(type, id, name, xyz, inputAID, inputBID, None)

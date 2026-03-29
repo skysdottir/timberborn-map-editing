@@ -3,14 +3,22 @@
 # Built from register1, so, supports th same IO count
 
 from src.abstract.component import Component
+from src.components.register1 import Register1
+from src.config.layoutconfig import LayoutConfig
 
+class RegisterN(Component):
+  def __init__(self, name, layout, bits, in_word, write_trigger, prev_read_word, read_trigger):
+    super().__init__(name, layout)
 
-class Register1(Component):
-  def __init__(self, name, loc, dir, in_value, write_trigger, prev_read, read_trigger):
-    super().__init__(name, loc, dir)
+    for bit in range(bits):
+      reg = Register1(name + f"_{bit}", layout.cursor(), in_word.bits[bit], write_trigger, prev_read_word.bits[bit], read_trigger)
+      self._subcomponents[bit]=reg
+      self._output.bits[bit]=reg._output.bits[0]
 
+      layout.step()
 
-  def dimensions(self):
-    xyz = self._anchor
-    xyz2 = (xyz[0], xyz[1], xyz[2]+4)
-    return (xyz, xyz2)
+      if(bit > 0 and bit % 8 == 0):
+        for step in range(LayoutConfig.ByteSpacing):
+          layout.step()
+    
+    layout.nextRow()

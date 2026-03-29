@@ -49,6 +49,6 @@ class Layout:
   def step(self):
     self._steps += 1
 
-  def next_row(self):
+  def nextRow(self):
     self._steps = 0
     self._row_steps += 1
