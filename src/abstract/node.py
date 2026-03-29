@@ -35,14 +35,14 @@ class NodeType(Enum):
   HTTP_ADAPTER = 702
 
 class Node(ABC):
-  def __init__(self, type, id, name, pos, inputAID=None, inputBID=None, inputResetID=None):
+  def __init__(self, type, id, name, pos, inputA=None, inputB=None, inputReset=None):
     self._type = type
     self._id = id or uuid4() # cheap shot, None is falsy so `or` falls through to uuid4()
     self._name = name
     self._pos = pos
-    self._inputAID = inputAID
-    self._inputBID = inputBID
-    self._inputResetID = inputResetID
+    self._inputA = inputA
+    self._inputB = inputB
+    self._inputReset = inputReset
 
   @abstractmethod
   def fromJson(jason):

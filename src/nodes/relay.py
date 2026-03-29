@@ -6,6 +6,15 @@ class Relay(Node):
   to_type_map = {value: key for key, value in type_map.items()}
 
   def toJson(self):
+    relay = {"Mode":Relay.type_map[self._type]}
+
+    if self._inputA is not None:
+      relay["InputA"] = str(self._inputA._id)
+    
+    if self._inputB is not None:
+       relay["InputB"] = str(self._inputB._id)
+
+
     return {
       "Id":str(self._id),
       "Template":"Relay.Folktails",
@@ -17,12 +26,7 @@ class Relay(Node):
           "Coordinates":{"X":self._pos[0],"Y":self._pos[1],"Z":self._pos[2]}, 
           "Orientation":"Cw90"
         },
-        "Relay":
-        {
-          "Mode":Relay.type_map[self._type],
-          "InputA":self._inputAID,
-          "InputB":self._inputBID
-        },
+        "Relay": relay,
         "Automator":{"State":"Off"},
         "Inventory:ConstructionSite":
         {

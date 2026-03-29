@@ -1,6 +1,7 @@
 from src.abstract.node import NodeType
 from src.components.register1 import Register1
 from src.nodes.lever import Lever
+from src.nodes.relay import Relay
 from src.nodes.indicator import Indicator
 from src.file.timberfile import Timberfile
 from src.platforms.platforms import generate_platforms
@@ -24,14 +25,16 @@ read_trigger = Lever(NodeType.LEVER, None, "read_trigger", (26, 20, 4), None, No
 
 register = Register1("reg", (24, 20, 4), write_bit, write_trigger, prev_read, read_trigger)
 
+missing_inputs_relay = Relay(NodeType.RELAY_NOT, None, "missing_inputs", (20, 26, 4), None, None, None)
+
 # and supporting structures
 plats = generate_platforms(register.nodes())
 
 print(json.dumps(plats))
 
-read_indicator = Indicator(NodeType.INDICATOR, None, "read_indicator", (28, 20, 4), str(register.output().bits[0]._id), None, None)
+read_indicator = Indicator(NodeType.INDICATOR, None, "read_indicator", (28, 20, 4), register.output().bits[0], None, None)
 
-file.addEntities([write_trigger, write_bit, prev_read, read_trigger, register, read_indicator])
+file.addEntities([write_trigger, write_bit, prev_read, read_trigger, register, read_indicator, missing_inputs_relay])
 file.addJsons(plats)
 
 file.save()

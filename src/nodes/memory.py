@@ -6,6 +6,18 @@ class Memory(Node):
   to_type_map = {value: key for key, value in type_map.items()}
 
   def toJson(self):
+    mem = {"Mode":Memory.type_map[self._type]}
+
+    if self._inputA is not None:
+      mem["InputA"] = str(self._inputA._id)
+    
+    if self._inputB is not None:
+       mem["InputB"] = str(self._inputB._id)
+
+    if self._inputReset is not None:
+      mem["InputReset"] = str(self._inputReset._id)
+
+
     return {
       "Id":str(self._id),
       "Template":"Memory.Folktails",
@@ -16,12 +28,7 @@ class Memory(Node):
         {
           "Coordinates":{"X":self._pos[0],"Y":self._pos[1],"Z":self._pos[2]}
         },
-        "Memory":
-        {
-          "Mode":Memory.type_map[self._type],
-          "InputA":self._inputAID,
-          "InputB":self._inputBID
-        },
+        "Memory": mem,
         "Automator":{"State":"Off"},
         "Inventory:ConstructionSite":
         {

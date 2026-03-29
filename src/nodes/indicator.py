@@ -16,7 +16,7 @@ class Indicator(Node):
         "Indicator": {
         },
         "Automatable": {
-          "Input": self._inputAID
+          "Input": str(self._inputA._id)
         },
         "Inventory:ConstructionSite": {
           "Storage": {
