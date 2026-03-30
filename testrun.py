@@ -1,12 +1,13 @@
 from src.abstract.node import NodeType
-from src.components.register1 import Register1
-from src.components.registerN import RegisterN
+from src.abstract.bus import Bus
+from src.components.demux import Demux
+from src.components.memoryBank import MemoryBank
 from src.components.inputN import InputN
 from src.components.indicatorN import IndicatorN
 from src.nodes.lever import Lever
 from src.file.timberfile import Timberfile
 from src.platforms.platforms import generate_platforms
-from src.abstract.Layout import Layout
+from src.abstract.layout import Layout
 import json
 
 import sys
@@ -18,21 +19,27 @@ file = Timberfile(inworld, outworld)
 file.open()
 
 # Generate new components
-bits = 16
-write_trigger = Lever(NodeType.LEVER, None, "write_trigger", (20, 18, 4), None, None, None)
-write_bits = InputN("write_bit", Layout((20, 20, 4), Layout.PlusY, Layout.PlusX), bits)
-read_trigger = Lever(NodeType.LEVER, None, "read_trigger", (22, 18, 4), None, None, None)
+bits = 8
+address_bits = 4
 
-register = RegisterN("reg", Layout((22, 20, 4), Layout.PlusY, Layout.PlusX), bits, write_bits.output(), write_trigger, None, read_trigger)
+write_enable = Lever(NodeType.LEVER, "write_trigger", (20, 20, 4), None, None, None)
+write_addr_bits = InputN("write_addr", Layout((20, 22, 4), Layout.PlusY, Layout.PlusX), address_bits)
+write_addr_bits._output._flags[Bus.Enable] = write_enable
+
+write_bits = InputN("write_bits", Layout((22, 20, 4), Layout.PlusY, Layout.PlusX), bits)
+
+read_enable = Lever(NodeType.LEVER, "read_trigger", (24, 20, 4), None, None, None)
+read_addr_bits = InputN("write_addr", Layout((24, 22, 4), Layout.PlusY, Layout.PlusX), address_bits)
+read_addr_bits._output._flags[Bus.Enable] = read_enable
+
+memory = MemoryBank("mem", Layout((28, 20, 4), Layout.PlusY, Layout.PlusX), read_addr_bits._output, write_addr_bits._output, write_bits._output, bits, address_bits)
+
+display = IndicatorN("indic", Layout((26, 20, 4), Layout.PlusY, Layout.PlusX), bits, memory._output)
 
 # and supporting structures
-plats = generate_platforms(register.nodes())
+plats = generate_platforms(memory.nodes())
 
-print(json.dumps(plats))
-
-read_indicator = IndicatorN("indicator", Layout((24, 20, 4), Layout.PlusY, Layout.PlusX), bits, register.output())
-
-file.addEntities([write_trigger, write_bits, read_trigger, register, read_indicator])
+file.addEntities([write_enable, write_addr_bits, write_bits, read_enable, read_addr_bits, display, memory])
 file.addJsons(plats)
 
 file.save()

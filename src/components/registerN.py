@@ -16,7 +16,7 @@ class RegisterN(Component):
           layout.step()
           
       reg = Register1(name + f"_{bit}", layout.cursor(), in_word._bits[bit], write_trigger, None if prev_read_word is None else prev_read_word._bits[bit], read_trigger)
-      self._subcomponents.append(reg)
+      self._nodes.extend(reg._nodes)
       self._output.bits.append(reg._output.bits[0])
 
       layout.step()

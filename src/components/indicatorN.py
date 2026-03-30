@@ -13,7 +13,7 @@ class IndicatorN(Component):
         for step in range(LayoutConfig.ByteSpacing):
           layout.step()
 
-      indic = Indicator(NodeType.INDICATOR, None, name + f"_{bit}", layout.cursor(), input.bits[bit])
+      indic = Indicator(NodeType.INDICATOR, name + f"_{bit}", layout.cursor(), input.bits[bit])
       self._nodes.append(indic)
 
       layout.step()

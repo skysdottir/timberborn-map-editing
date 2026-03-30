@@ -46,9 +46,16 @@ class Layout:
     xyz = self._loc
     return(xyz[0] + offset._x, xyz[1]+offset._y, xyz[2])
 
-  def step(self):
-    self._steps += 1
+  def step(self, steps=1):
+    self._steps += steps
 
-  def nextRow(self):
+  def nextRow(self, steps=1):
     self._steps = 0
-    self._row_steps += 1
+    self._row_steps += steps
+
+  def offset(self, steps):
+    step_offset = self._step * steps
+    row_offset = self._row * self._row_steps
+    offset = step_offset + row_offset
+    xyz = self._loc
+    return (xyz[0]+offset._x, xyz[1]+offset._y, xyz[2])

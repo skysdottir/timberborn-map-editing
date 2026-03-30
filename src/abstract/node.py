@@ -35,9 +35,9 @@ class NodeType(Enum):
   HTTP_ADAPTER = 702
 
 class Node(ABC):
-  def __init__(self, type, id, name, pos, inputA=None, inputB=None, inputReset=None):
+  def __init__(self, type, name, pos, inputA=None, inputB=None, inputReset=None):
     self._type = type
-    self._id = id or uuid4() # cheap shot, None is falsy so `or` falls through to uuid4()
+    self._id = uuid4()
     self._name = name
     self._pos = pos
     self._inputA = inputA

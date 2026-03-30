@@ -13,7 +13,7 @@ class InputN(Component):
         for step in range(LayoutConfig.ByteSpacing):
           layout.step()
 
-      lever = Lever(NodeType.LEVER, None, name + f"_{bit}", layout.cursor())
+      lever = Lever(NodeType.LEVER, name + f"_{bit}", layout.cursor())
       self._output.bits.append(lever)
       self._nodes.append(lever)
 
