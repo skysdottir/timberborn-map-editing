@@ -44,6 +44,9 @@ class Node(ABC):
     self._inputB = inputB
     self._inputReset = inputReset
 
+  # fromJson() is expected to be static
+  # It's also currently gonna break horribly on all the node types, don't use it
+  # until you've implemented json input correctly
   @abstractmethod
   def fromJson(jason):
     pass

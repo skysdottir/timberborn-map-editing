@@ -1,6 +1,5 @@
 from src.abstract.node import NodeType
 from src.abstract.bus import Bus
-from src.components.demux import Demux
 from src.components.memoryBank import MemoryBank
 from src.components.inputN import InputN
 from src.components.indicatorN import IndicatorN
@@ -8,7 +7,6 @@ from src.nodes.lever import Lever
 from src.file.timberfile import Timberfile
 from src.platforms.platforms import generate_platforms
 from src.abstract.layout import Layout
-import json
 
 import sys
 
