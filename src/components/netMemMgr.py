@@ -13,12 +13,12 @@ from src.nodes.timer import Timer
 # Both read_addr and read_bits start ready to write, read_enable starts off
 # network writes read addr
 # delay some time
-# network writes read_addr_ready
-# read_enable flips on, mem reads, writes back to read_bits
+# network writes read_addr_ready, **read_enable goes high**
+# mem reads, writes back to read_bits
 # delay 1 tick for http
-# read_bits_ready goes high, read_addr_used goes high, read_addr goes ready, read_enable flips back off
+# read_bits_ready goes high, read_addr_used goes high, read_addr goes ready, **read_enable stays high**
 # network reads bits
-# network flips read_bits_used, read_bits go back to ready
+# network flips read_bits_used, read_bits go back to ready, **read_enable goes low**
 # And we're back where we started, just with both _ready and _useds high instead of low
 
 class NetMemMgr(Component):
@@ -34,20 +34,18 @@ class NetMemMgr(Component):
     self._read_addr_status = Relay(NodeType.RELAY_XOR, name+"_ra_x", loc.cursor())
     loc.step()
     self._read_bits_status = Relay(NodeType.RELAY_XOR, name+"_rb_x", loc.cursor())
-    loc.step()
-    self._not_read_status = Relay(NodeType.RELAY_NOT, name+"_rb_n", loc.cursor(), self._read_bits_status)
 
     loc.step(2)
 
     self._read_addr = HttpLeverN(name+"_ra", loc, addr_bits, host)
 
-    self._nodes.extend([self._read_addr_status, self._read_bits_status, self._not_read_status])
+    self._nodes.extend([self._read_addr_status, self._read_bits_status])
     self._nodes.extend(self._read_addr._nodes)
 
-    self._read_enable = Relay(NodeType.RELAY_AND, name+"_read", loc.cursor(), self._read_addr_status, self._not_read_status)
+    self._read_enable = Memory(NodeType.MEM_SET_RESET, name+"_read", loc.cursor(), self._read_addr_status, self._read_bits_status)
     loc.step()
     self._read_ready_toggle = Memory(NodeType.MEM_TOGGLE, name+"_ra_m", loc.cursor(), self._read_enable, None, None)
-    loc.step(3)
+    loc.step(2)
 
     self._read_bits = HttpAdapterN(name+"_rd_b", loc, data_bits, None, host)
 
@@ -78,7 +76,7 @@ class NetMemMgr(Component):
     write_addr_status = Relay(NodeType.RELAY_XOR, name+"_wa_x", loc.cursor())
     loc.step()
     write_bits_status = Relay(NodeType.RELAY_XOR, name+"_wb_x", loc.cursor())
-    loc.step(3)
+    loc.step(2)
 
     write_addr = HttpLeverN(name+"_wa", loc, addr_bits, host)
 
@@ -90,7 +88,7 @@ class NetMemMgr(Component):
     write_enable = Relay(NodeType.RELAY_AND, name+"_read", loc.cursor(), write_addr_status, write_bits_status)
     loc.step()
     write_used_toggle = Memory(NodeType.MEM_TOGGLE, name+"_wb_m", loc.cursor(), write_enable, None, None)
-    loc.step(3)
+    loc.step(2)
 
     write_bits = HttpLeverN(name+"_wb", loc, data_bits, host)
 
