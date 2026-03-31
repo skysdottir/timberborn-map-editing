@@ -22,7 +22,7 @@ from src.nodes.timer import Timer
 # And we're back where we started, just with both _ready and _useds high instead of low
 
 class NetMemMgr(Component):
-  def __init__(self, name, loc, bits, regs, host, mem=None):
+  def __init__(self, name, loc, data_bits, addr_bits, host, mem=None):
     super().__init__(name, loc)
 
     # Create the nodes, do none of the wiring until we have the Memory we're managing
@@ -39,22 +39,21 @@ class NetMemMgr(Component):
 
     loc.step(2)
 
-    self._read_addr = HttpLeverN(name+"_ra", loc, regs, host)
+    self._read_addr = HttpLeverN(name+"_ra", loc, addr_bits, host)
 
     self._nodes.extend([self._read_addr_status, self._read_bits_status, self._not_read_status])
     self._nodes.extend(self._read_addr._nodes)
-    loc.nextRow()
 
     self._read_enable = Relay(NodeType.RELAY_AND, name+"_read", loc.cursor(), self._read_addr_status, self._not_read_status)
     loc.step()
     self._read_ready_toggle = Memory(NodeType.MEM_TOGGLE, name+"_ra_m", loc.cursor(), self._read_enable, None, None)
     loc.step(3)
 
-    self._read_bits = HttpAdapterN(name+"_rd_b", loc, bits, None, host)
+    self._read_bits = HttpAdapterN(name+"_rd_b", loc, data_bits, None, host)
 
     self._nodes.extend([self._read_enable, self._read_ready_toggle])
     self._nodes.extend(self._read_bits._nodes)
-    loc.nextRow(2)
+    loc.nextRow()
 
     # Populate the read flags that we can
     self._read_addr_bus = self._read_addr._output
@@ -81,11 +80,10 @@ class NetMemMgr(Component):
     write_bits_status = Relay(NodeType.RELAY_XOR, name+"_wb_x", loc.cursor())
     loc.step(3)
 
-    write_addr = HttpLeverN(name+"_wa", loc, regs, host)
+    write_addr = HttpLeverN(name+"_wa", loc, addr_bits, host)
 
     self._nodes.extend([write_addr_status, write_bits_status])
     self._nodes.extend(write_addr._nodes)
-    loc.nextRow()
 
     # We'll tell the mem to write
     # and then the mem will delay a tick before setting both write and write_addr Useds
@@ -94,25 +92,24 @@ class NetMemMgr(Component):
     write_used_toggle = Memory(NodeType.MEM_TOGGLE, name+"_wb_m", loc.cursor(), write_enable, None, None)
     loc.step(3)
 
-    write_bits = HttpLeverN(name+"_wb", loc, regs, host)
+    write_bits = HttpLeverN(name+"_wb", loc, data_bits, host)
 
     self._nodes.extend([write_enable, write_used_toggle])
     self._nodes.extend(write_bits._nodes)
-    loc.nextRow()
 
     # set up the write busses
-    write_addr_bus = write_addr._output
-    write_addr_bus._flags[Bus.Enable] = write_enable
-    write_addr_bus._flags[Bus.Used] = write_used_toggle
+    self._write_addr_bus = write_addr._output
+    self._write_addr_bus._flags[Bus.Enable] = write_enable
+    self._write_addr_bus._flags[Bus.Used] = write_used_toggle
     write_addr.setUsed()
-    write_addr_status._inputA = write_addr_bus._flags[Bus.Ready]
+    write_addr_status._inputA = self._write_addr_bus._flags[Bus.Ready]
     write_addr_status._inputB = write_used_toggle
 
-    write_bits_bus = write_bits._output
-    write_bits_bus._flags[Bus.Enable] = write_enable
-    write_bits_bus._flags[Bus.Used] = write_used_toggle
+    self._write_bits_bus = write_bits._output
+    self._write_bits_bus._flags[Bus.Enable] = write_enable
+    self._write_bits_bus._flags[Bus.Used] = write_used_toggle
     write_bits.setUsed()
-    write_bits_status._inputA = write_bits_bus._flags[Bus.Ready]
+    write_bits_status._inputA = self._write_bits_bus._flags[Bus.Ready]
     write_bits_status._inputB = write_used_toggle
 
     # And if we were constructed with a mem, jump to the wiring

@@ -9,16 +9,12 @@ class HttpAdapter(Node):
   def toJson(self):
     # No argument will be accepted, POST is the right HTTP verb
     http = {"MethodKey": "Post"}
-
-    if self._switched_on_url is not None:
-      # sic "webbook"
-      http["SwitchedOnWebbookUrlKey"] = f"http://{self._host}/on/{self._name}"
-      http["SwitchedOnWebbookEnabledKey"] = True
-    
-    if self._switched_off_url is not None:
-      # sic "webbook"
-      http["SwitchedOffWebbookUrlKey"] = f"http://{self._host}/off/{self._name}"
-      http["SwitchedOffWebbookEnabledKey"] = True
+    # sic "webbook"
+    http["SwitchedOnWebbookUrlKey"] = f"http://{self._host}/on/{self._name}"
+    http["SwitchedOnWebbookEnabledKey"] = True
+    # sic "webbook"
+    http["SwitchedOffWebbookUrlKey"] = f"http://{self._host}/off/{self._name}"
+    http["SwitchedOffWebbookEnabledKey"] = True
 
     return {
       "Id":str(self._id),

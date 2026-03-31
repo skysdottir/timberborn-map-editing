@@ -37,7 +37,7 @@ class HttpAdapterN(Component):
   def setInput(self, input):
     input._flags[Bus.Used] = self._used
 
-    for i in len(input._bits):
+    for i in range(len(input._bits)):
       self._adaps[i]._inputA = input._bits[i]
     
     self._ready._inputA = input._flags[Bus.Ready]
