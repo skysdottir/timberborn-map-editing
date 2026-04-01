@@ -15,7 +15,7 @@ class Memory(Node):
        mem["InputB"] = str(self._inputB._id)
 
     if self._inputReset is not None:
-      mem["InputReset"] = str(self._inputReset._id)
+      mem["ResetInput"] = str(self._inputReset._id)
 
 
     return {
