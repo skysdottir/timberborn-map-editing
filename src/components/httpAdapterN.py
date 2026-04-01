@@ -19,8 +19,6 @@ class HttpAdapterN(Component):
       self._adaps.append(adap)
 
       layout.step()
-    
-    layout.nextRow()
 
     if input is not None:
       self.setInput(input)

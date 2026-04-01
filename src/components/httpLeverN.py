@@ -18,5 +18,3 @@ class HttpLeverN(Component):
       self._nodes.append(lever)
 
       layout.step()
-
-    layout.nextRow()

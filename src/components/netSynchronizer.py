@@ -18,9 +18,11 @@ class NetSynchronizer(Component):
     loc.step()
     used = HttpLever(NodeType.HTTP_LEVER, name+"_used", loc.cursor())
     loc.nextRow()
-    myturn = Relay(NodeType.RELAY_XOR, name+"_x", loc.cursor(), ready, used, None)
-    loc.step()
+    
     self._mem = Memory(NodeType.MEM_TOGGLE, name+"_m", loc.cursor(), input, None, None)
+    loc.step()
+    myturn = Relay(NodeType.RELAY_XOR, name+"_x", loc.cursor(), self._mem, used, None)
+    ready._inputA = self._mem
 
     self._nodes.extend([ready, used, myturn, self._mem])
     self._output._bits.append(myturn)
