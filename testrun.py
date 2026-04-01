@@ -18,12 +18,12 @@ file = Timberfile(inworld, outworld)
 file.open()
 
 # Generate new components
-bits = 8
-address_bits = 4
+bits = 16
+address_bits = 8
 
-nmm = NetMemMgr("nmm", Layout((20, 20, 4), Layout.PlusY, Layout.PlusX), bits, address_bits, "localhost:8081")
+nmm = NetMemMgr("nmm", Layout((4, 30, 4), Layout.PlusX, Layout.PlusY), bits, address_bits, "localhost:8081")
 
-memory = MemoryBank("mem", Layout((26, 20, 4), Layout.PlusY, Layout.PlusX), nmm._read_addr_bus, nmm._write_addr_bus, nmm._write_bits_bus, bits, address_bits)
+memory = MemoryBank("mem", Layout((0, 20, 4), Layout.PlusX, Layout.MinusY), nmm._read_addr_bus, nmm._write_addr_bus, nmm._write_bits_bus, bits, address_bits)
 
 nmm.setMem(memory)
 

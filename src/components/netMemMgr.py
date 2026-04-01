@@ -1,12 +1,11 @@
 from src.abstract.bus import Bus
 from src.abstract.component import Component
 from src.abstract.layout import Layout
-from src.abstract.node import NodeType
 from src.components.httpAdapterN import HttpAdapterN
 from src.components.httpLeverN import HttpLeverN
+from src.components.LatchN import LatchN
 from src.components.netSynchronizer import NetSynchronizer
-from src.nodes.memory import Memory
-from src.nodes.relay import Relay
+
 
 # A silly little device for managing a memory block from the network
 # still todo: Wiring it up so it can also work with a computer internally
@@ -17,6 +16,7 @@ class NetMemMgr(Component):
     super().__init__(name, loc)
 
     read_sync = NetSynchronizer(name+"_r_sync", Layout(loc.cursor(), loc._step, loc._row), None, host)
+    self._read_sync = read_sync
 
     # Just loopback the input, we're going to read immediately when we're triggered and pass it back
     read_sync.set_input(read_sync._output.bits[0])
@@ -28,7 +28,11 @@ class NetMemMgr(Component):
 
     loc.nextRow()
     loc.step(3)
-    read_bits = HttpAdapterN(name+"_rb", loc, data_bits, None, host)
+    self._read_store = LatchN(name+"_rm", loc, data_bits, None)
+
+    loc.nextRow()
+    loc.step(3)
+    read_bits = HttpAdapterN(name+"_rb", loc, data_bits, self._read_store._output, host)
     self._read_bits = read_bits
 
     loc.nextRow(2)
@@ -51,9 +55,11 @@ class NetMemMgr(Component):
     self._nodes.extend(read_sync._nodes)
     self._nodes.extend(read_addr._nodes)
     self._nodes.extend(read_bits._nodes)
+    self._nodes.extend(self._read_store._nodes)
     self._nodes.extend(write_sync._nodes)
     self._nodes.extend(write_addr._nodes)
     self._nodes.extend(write_bits._nodes)
 
   def setMem(self, mem):
-    self._read_bits.setInput(mem._output)
+    mem._output._flags[Bus.Enable] = self._read_sync._output.bits[0]
+    self._read_store.setInput(mem._output)
