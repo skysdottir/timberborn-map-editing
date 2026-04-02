@@ -3,7 +3,7 @@
 # Built from register1, so, supports th same IO count
 
 from src.abstract.component import Component
-from src.components.register1 import Register1
+from src.components.mem.register1 import Register1
 from src.config.layoutconfig import LayoutConfig
 
 class RegisterN(Component):

@@ -1,10 +1,10 @@
 from src.abstract.bus import Bus
 from src.abstract.component import Component
 from src.abstract.layout import Layout
-from src.components.httpAdapterN import HttpAdapterN
-from src.components.httpLeverN import HttpLeverN
+from src.components.net.httpAdapterN import HttpAdapterN
+from src.components.net.httpLeverN import HttpLeverN
 from src.components.LatchN import LatchN
-from src.components.netSynchronizer import NetSynchronizer
+from src.components.net.netSynchronizer import NetSynchronizer
 
 
 # A silly little device for managing a memory block from the network

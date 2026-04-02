@@ -1,6 +1,6 @@
 from src.abstract.component import Component
 from src.abstract.layout import Layout
-from src.components.registerN import RegisterN
+from src.components.mem.registerN import RegisterN
 from src.components.demux import Demux
 from src.config.layoutconfig import LayoutConfig
 
