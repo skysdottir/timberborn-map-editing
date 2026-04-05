@@ -35,7 +35,7 @@ class NodeType(Enum):
   HTTP_ADAPTER = 702
 
 class Node(ABC):
-  def __init__(self, type, name, pos, inputA=None, inputB=None, inputReset=None):
+  def __init__(self, type, name, pos=None, inputA=None, inputB=None, inputReset=None):
     self._type = type
     self._id = uuid4()
     self._name = name
@@ -43,6 +43,27 @@ class Node(ABC):
     self._inputA = inputA
     self._inputB = inputB
     self._inputReset = inputReset
+
+  def pos(self, loc):
+    self._pos = loc
+    return self
+  
+  def inputA(self, inputA):
+    self._inputA = inputA
+    return self
+  
+  def inputB(self, inputB):
+    self._inputB = inputB
+    return self
+  
+  def reset(self, reset):
+    self._inputReset = reset
+    return self
+  
+  def toJson(self):
+    assert self._pos is not None, f"No position set for node {self._name}"
+
+    return self.toJson_i()
 
   # fromJson() is expected to be static
   # It's also currently gonna break horribly on all the node types, don't use it
@@ -52,5 +73,5 @@ class Node(ABC):
     pass
 
   @abstractmethod
-  def toJson():
+  def toJson_i():
     pass

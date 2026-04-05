@@ -3,7 +3,7 @@ import uuid
 
 class Lever(Node):
 
-  def toJson(self):
+  def toJson_i(self):
     return {
       "Id":str(self._id),
       "Template": "Lever.Folktails",

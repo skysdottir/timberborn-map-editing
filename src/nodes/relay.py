@@ -5,7 +5,7 @@ class Relay(Node):
   type_map = {NodeType.RELAY_OR: "Or", NodeType.RELAY_AND: "And", NodeType.RELAY_XOR: "Xor", NodeType.RELAY_NOT: "Not", NodeType.RELAY_PASSTHROUGH: "Passthrough"}
   to_type_map = {value: key for key, value in type_map.items()}
 
-  def toJson(self):
+  def toJson_i(self):
     relay = {"Mode":Relay.type_map[self._type]}
 
     if self._inputA is not None:

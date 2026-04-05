@@ -5,7 +5,7 @@ class Memory(Node):
   type_map = {NodeType.MEM_SET_RESET: "SetReset", NodeType.MEM_TOGGLE: "Toggle", NodeType.MEM_LATCH: "Latch", NodeType.MEM_FLIPFLOP: "FlipFlop"}
   to_type_map = {value: key for key, value in type_map.items()}
 
-  def toJson(self):
+  def toJson_i(self):
     mem = {"Mode":Memory.type_map[self._type]}
 
     if self._inputA is not None:

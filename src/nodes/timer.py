@@ -12,7 +12,7 @@ class Timer(Node):
     self._interval_a = interval_a_ticks
     self._interval_b = interval_b_ticks
 
-  def toJson(self):
+  def toJson_i(self):
     timer = {"Mode":Timer.type_map[self._type]}
 
     if self._inputA is not None:

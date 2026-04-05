@@ -6,7 +6,7 @@ class HttpAdapter(Node):
     super().__init__(type, name, loc, input, None, None)
     self._host = host
 
-  def toJson(self):
+  def toJson_i(self):
     # No argument will be accepted, POST is the right HTTP verb
     http = {"MethodKey": "Post"}
     # sic "webbook"

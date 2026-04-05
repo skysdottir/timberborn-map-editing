@@ -3,7 +3,7 @@ import uuid
 
 class Indicator(Node):
 
-  def toJson(self):
+  def toJson_i(self):
     return {
       "Id":str(self._id),
       "Template": "Indicator.Folktails",

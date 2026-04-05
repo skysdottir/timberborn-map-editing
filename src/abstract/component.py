@@ -1,7 +1,8 @@
 # Abstract: A builder for a chunk of timberborn logic.
 # Expected workflow: 
 # 1) Build a bunch of components
-# 1.5) Partially as you go and partially after the fact, set inputs and outputs
+# 1.25) Partially as you go and partially after the fact, set inputs and outputs
+# 1.5) Set their locations if you didn't already
 # 2) Validate that they aren't going to collide or otherwise cause trouble
 # 3) Sketch() them all, to set up input and output relays, placeholders in-game.
 # 4) Do any hand-work in-game

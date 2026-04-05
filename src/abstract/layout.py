@@ -63,3 +63,6 @@ class Layout:
   def clone(self, offset):
     xyz = self._loc
     return Layout((xyz[0]+offset[0], xyz[1]+offset[1], xyz[2]+offset[2]), self._step, self._row)
+  
+  def starthere(self, offset = 0):
+    return Layout(self.cursor(offset), self._step, self._row)

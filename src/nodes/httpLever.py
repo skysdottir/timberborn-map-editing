@@ -4,7 +4,7 @@ import uuid
 
 class HttpLever(Node):
 
-  def toJson(self):
+  def toJson_i(self):
     return {
       "Id":str(self._id),
       "Template": "HttpLever.Folktails",
